@@ -123,11 +123,6 @@ nmap ,d "*yiw
 " paste
 nmap ,v :set paste<CR>"*p:set nopaste<CR>
 
-" Fix frequent typo of mine
-"command WQ wq
-"command Wq wq
-"command W w
-"command Q q
 
 " Youcompleteme gutter stays open at all times
 "let g:gitgutter_sign_column_always = 1
@@ -161,8 +156,8 @@ let g:ale_fix_on_save = 1
 let g:jsx_ext_required = 0
 
 " Standard js style on save
-"autocmd bufwritepost *.js silent !standard --fix %
-"set autoread
+" autocmd bufwritepost *.js silent !standard --fix %
+" set autoread
 
 nnoremap <leader>s :ALENextWrap<CR>
 
