@@ -6,6 +6,14 @@ call plug#begin('~/.vim/plugged')
 " File structure and viewer
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
+" tmux with VIM
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'benmills/vimux'
+
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript']}
+
 " HTML plugin emmet
 Plug 'mattn/emmet-vim'
 
@@ -123,6 +131,8 @@ nmap ,d "*yiw
 " paste
 nmap ,v :set paste<CR>"*p:set nopaste<CR>
 
+" Fixing ycm python 3.7 warning
+silent! py3 pass
 
 " Youcompleteme gutter stays open at all times
 "let g:gitgutter_sign_column_always = 1
@@ -144,7 +154,6 @@ let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:airline_section_error = '%{ALEGetStatusLine()}'
 
 let g:ale_linters = { 'javascript': ['eslint'], 'jsx': ['eslint']  }
 let g:ale_javascript_eslint_use_global = 1
@@ -167,5 +176,10 @@ autocmd Filetype html set tabstop=2 softtabstop=2 shiftwidth=2
 autocmd Filetype javascript set expandtab  tabstop=2 softtabstop=2 shiftwidth=2
 autocmd Filetype java set tabstop=4 softtabstop=4 shiftwidth=4
 autocmd Filetype yaml set expandtab tabstop=2 softtabstop=2 shiftwidth=2
+
+" run last vimux command
+map <Leader>rr :call VimuxRunLastCommand()<CR>
+" run vimux command
+map <Leader>rp :VimuxPromptCommand<CR>
 
 map Y y$
