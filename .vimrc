@@ -1,6 +1,7 @@
 """ execute pathogen#infect()
 """ syntax on
 """ filetype plugin indent on
+set nocompatible
 
 call plug#begin('~/.vim/plugged')
 " File structure and viewer
@@ -12,16 +13,19 @@ Plug 'benmills/vimux'
 
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
-  \ 'for': ['javascript']}
+  \ 'for': ['javascript', 'typescript', 'typescriptreact', 'javascriptreact']}
 
 " HTML plugin emmet
-Plug 'mattn/emmet-vim'
+"Plug 'mattn/emmet-vim'
 
 "Expanded git functionality
 Plug 'tpope/vim-fugitive'
+Plug 'vim-airline/vim-airline'
+Plug 'dense-analysis/ale'
 
 " Javascript syntax highlighter
-Plug 'jelera/vim-javascript-syntax'
+"Plug 'jelera/vim-javascript-syntax'
+"Plug 'leafgarland/typescript-vim'
 
 " Make indentation more clear
 Plug 'Yggdroot/indentLine'
@@ -38,9 +42,8 @@ Plug 'mxw/vim-jsx'
 
 " Code Snippets plugin and library
 Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'epilande/vim-es2015-snippets'
-Plug 'epilande/vim-react-snippets'
+"Plug 'epilande/vim-es2015-snippets'
+Plug 'mlaursen/vim-react-snippets'
 
 " Javascript bundle
 Plug 'pangloss/vim-javascript'
@@ -49,14 +52,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'altercation/vim-colors-solarized'
 
 " Text completer
-Plug 'Valloric/YouCompleteMe'
-
-" Fancy vim status bar
-Plug 'powerline/powerline'
-Plug 'vim-airline/vim-airline'
-
-" Linter
-Plug 'w0rp/ale'
+Plug 'ycm-core/YouCompleteMe'
 
 " Easy commenting
 Plug 'scrooloose/nerdcommenter'
@@ -64,15 +60,12 @@ Plug 'scrooloose/nerdcommenter'
 " Back to basics
 Plug 'tpope/vim-sensible'
 
-" Rails stuff
-Plug 'tpope/vim-rails'
-
-" Ruby stuff
-Plug 'vim-ruby/vim-ruby'
+" Auto close brackets
+Plug 'Raimondi/delimitMate'
+Plug 'alvan/vim-closetag'
 
 " Improved text editing
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-endwise'
 
 call plug#end()
 
@@ -114,7 +107,10 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
 " mapping fuzzyfinder to ctrl-p
-nnoremap <C-p> :FZF<CR>
+nnoremap <C-p> :GFiles<CR>
+
+" Ag fuzzy match in files
+nnoremap <C-o> :Ag<CR>
 
 " Convenience
 nmap ,a :wa<CR>
@@ -130,20 +126,6 @@ vmap ,c "*y
 nmap ,d "*yiw
 " paste
 nmap ,v :set paste<CR>"*p:set nopaste<CR>
-
-" Fixing ycm python 3.7 warning
-silent! py3 pass
-
-" Youcompleteme gutter stays open at all times
-"let g:gitgutter_sign_column_always = 1
-"set signcolumn="yes"
-"^ didn't work so adding dummy sign
-autocmd BufEnter * sign define dummy
-autocmd BufEnter * execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('')
-
-" attempt to get rid of sign bar in nerdtree
-autocmd BufEnter NERD_tree_* let g:quickfixsigns#marks#buffer = []
-autocmd CursorHold NERD_tree_* let g:quickfixsigns#marks#buffer = []
 
 " UltiSnips changing tab expansion key
 let g:UltiSnipsExpandTrigger="<c-t>"
@@ -164,9 +146,8 @@ let g:ale_fix_on_save = 1
 " JSX highlighting in other file types than .jsx
 let g:jsx_ext_required = 0
 
-" Standard js style on save
-" autocmd bufwritepost *.js silent !standard --fix %
-" set autoread
+" close tags in other file types than jsx
+let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,jsx,js,tsx,ts'
 
 nnoremap <leader>s :ALENextWrap<CR>
 
@@ -174,6 +155,9 @@ autocmd Filetype python set tabstop=4 softtabstop=4 shiftwidth=4
 autocmd Filetype ruby set expandtab tabstop=2 softtabstop=2 shiftwidth=2
 autocmd Filetype html set tabstop=2 softtabstop=2 shiftwidth=2
 autocmd Filetype javascript set expandtab  tabstop=2 softtabstop=2 shiftwidth=2
+autocmd Filetype typescript set expandtab  tabstop=2 softtabstop=2 shiftwidth=2
+autocmd Filetype javascriptreact set expandtab  tabstop=2 softtabstop=2 shiftwidth=2
+autocmd Filetype typescriptreact set expandtab  tabstop=2 softtabstop=2 shiftwidth=2
 autocmd Filetype java set tabstop=4 softtabstop=4 shiftwidth=4
 autocmd Filetype yaml set expandtab tabstop=2 softtabstop=2 shiftwidth=2
 
@@ -181,5 +165,11 @@ autocmd Filetype yaml set expandtab tabstop=2 softtabstop=2 shiftwidth=2
 map <Leader>rr :call VimuxRunLastCommand()<CR>
 " run vimux command
 map <Leader>rp :VimuxPromptCommand<CR>
+
+" running curl commands in .sh files
+command Exec set splitright | vnew | set filetype=sh | read !sh #
+
+" bandaid nerdtree menu fix
+let g:NERDTreeMinimalMenu=1
 
 map Y y$
